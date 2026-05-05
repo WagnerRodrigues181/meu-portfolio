@@ -1,5 +1,16 @@
-import React from "react";
-import { Box, Container, Typography, useTheme, alpha } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  useTheme,
+  alpha,
+  Collapse,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import TechStackBox from "../common/TechStackBox";
 import {
   frontEndStacks,
@@ -9,6 +20,10 @@ import {
 
 export default function TechStackSection() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [backEndOpen, setBackEndOpen] = useState(false);
+  const [othersOpen, setOthersOpen] = useState(false);
 
   const SectionTitle = ({ children }) => (
     <Typography
@@ -39,20 +54,40 @@ export default function TechStackSection() {
     </Typography>
   );
 
+  const CollapseToggle = ({ open, onToggle, label }) => (
+    <Box sx={{ textAlign: "center", mt: 3 }}>
+      <Button
+        onClick={onToggle}
+        endIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        sx={{
+          textTransform: "none",
+          fontWeight: 600,
+          fontSize: "0.85rem",
+          color: theme.palette.primary.main,
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
+          borderRadius: 3,
+          px: 3,
+          py: 0.8,
+          bgcolor: alpha(theme.palette.primary.main, 0.05),
+          "&:hover": {
+            bgcolor: alpha(theme.palette.primary.main, 0.1),
+            border: `1px solid ${theme.palette.primary.main}`,
+          },
+        }}
+      >
+        {open ? "Recolher" : label}
+      </Button>
+    </Box>
+  );
+
   return (
     <Box
       sx={{
         py: 10,
         background:
           theme.palette.mode === "dark"
-            ? `linear-gradient(180deg, ${alpha(
-                theme.palette.primary.dark,
-                0.03
-              )} 0%, ${alpha(theme.palette.background.default, 0.5)} 100%)`
-            : `linear-gradient(180deg, ${alpha(
-                theme.palette.primary.light,
-                0.03
-              )} 0%, ${theme.palette.background.default} 100%)`,
+            ? `linear-gradient(180deg, ${alpha(theme.palette.primary.dark, 0.03)} 0%, ${alpha(theme.palette.background.default, 0.5)} 100%)`
+            : `linear-gradient(180deg, ${alpha(theme.palette.primary.light, 0.03)} 0%, ${theme.palette.background.default} 100%)`,
       }}
     >
       <Container maxWidth="xl">
@@ -68,7 +103,7 @@ export default function TechStackSection() {
           Tech Stack
         </Typography>
 
-        {/* FRONT-END */}
+        {/* FRONT-END — sempre visível */}
         <Box sx={{ mb: 10 }}>
           <SectionTitle>Front-End</SectionTitle>
           <TechStackBox stacks={frontEndStacks} />
@@ -77,13 +112,39 @@ export default function TechStackSection() {
         {/* BACK-END */}
         <Box sx={{ mb: 10 }}>
           <SectionTitle>Back-End</SectionTitle>
-          <TechStackBox stacks={backEndStacks} />
+          {isMobile ? (
+            <>
+              <Collapse in={backEndOpen} timeout={400}>
+                <TechStackBox stacks={backEndStacks} />
+              </Collapse>
+              <CollapseToggle
+                open={backEndOpen}
+                onToggle={() => setBackEndOpen((p) => !p)}
+                label="Ver tecnologias Back-End"
+              />
+            </>
+          ) : (
+            <TechStackBox stacks={backEndStacks} />
+          )}
         </Box>
 
         {/* OUTROS */}
         <Box>
           <SectionTitle>Outros</SectionTitle>
-          <TechStackBox stacks={otherStacks} isOthersSection={true} />
+          {isMobile ? (
+            <>
+              <Collapse in={othersOpen} timeout={400}>
+                <TechStackBox stacks={otherStacks} isOthersSection={true} />
+              </Collapse>
+              <CollapseToggle
+                open={othersOpen}
+                onToggle={() => setOthersOpen((p) => !p)}
+                label="Ver outras tecnologias"
+              />
+            </>
+          ) : (
+            <TechStackBox stacks={otherStacks} isOthersSection={true} />
+          )}
         </Box>
       </Container>
     </Box>

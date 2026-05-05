@@ -127,7 +127,12 @@ export default function ContactSection() {
       />
 
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        <Stack spacing={2} alignItems="center" mb={8} textAlign="center">
+        <Stack
+          spacing={2}
+          alignItems="center"
+          mb={{ xs: 4, md: 8 }}
+          textAlign="center"
+        >
           <Typography
             variant="h3"
             sx={{
@@ -154,7 +159,7 @@ export default function ContactSection() {
           </Typography>
         </Stack>
 
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
           <Grid item xs={12} md={4}>
             <ContactButton
               href="mailto:rodrigueswagner181@gmail.com"
@@ -177,7 +182,7 @@ export default function ContactSection() {
 
           <Grid item xs={12} sm={6} md={4}>
             <ContactButton
-              href="/assets/Wagner_Rodrigues_Frontend_Developer.pdf"
+              href="/path/to/your/resume.pdf"
               icon={<DescriptionIcon sx={{ fontSize: 32 }} />}
               title="Currículo"
               subtitle="Baixar versão PDF"

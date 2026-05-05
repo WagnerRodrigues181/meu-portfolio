@@ -112,11 +112,12 @@ export default function ProjectsGrid() {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: theme.palette.mode === "dark" ? "40%" : "20%",
-                background:
+                height: "40%",
+                background: `linear-gradient(to top, ${
                   theme.palette.mode === "dark"
-                    ? "linear-gradient(to top, rgba(8,8,12,0.95) 0%, transparent 100%)"
-                    : "linear-gradient(to top, rgba(245,245,250,0.3) 0%, transparent 100%)",
+                    ? "rgba(8,8,12,0.95)"
+                    : "rgba(245,245,250,0.95)"
+                } 0%, transparent 100%)`,
                 pointerEvents: "none",
               }}
             />
@@ -406,6 +407,7 @@ export default function ProjectsGrid() {
               fontWeight: 900,
               mb: 1.5,
               letterSpacing: "-0.03em",
+              fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
               background: `linear-gradient(135deg, ${theme.palette.text.primary} 40%, ${theme.palette.primary.main} 100%)`,
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
