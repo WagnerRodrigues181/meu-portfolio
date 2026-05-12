@@ -182,7 +182,7 @@ export default function ContactSection() {
 
           <Grid item xs={12} sm={6} md={4}>
             <ContactButton
-              href="/path/to/your/resume.pdf"
+              href="/assets/Wagner_Rodrigues_Frontend_Developer.pdf"
               icon={<DescriptionIcon sx={{ fontSize: 32 }} />}
               title="Currículo"
               subtitle="Baixar versão PDF"
