@@ -1,4 +1,4 @@
-import proj1Image from "../assets/form.png";
+// import proj1Image from "../assets/form.png";
 import cryptoDashboard from "../assets/crypto-dashboard.png";
 import cryptoDetailCard from "../assets/crypto-detail-card.png";
 import horaCodarLogica from "../assets/hora-codar-logica.png";
