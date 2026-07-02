@@ -172,7 +172,7 @@ export default function ContactSection() {
 
           <Grid item xs={12} sm={6} md={4}>
             <ContactButton
-              href="https://api.whatsapp.com/send?phone=5532998765432"
+              href="https://api.whatsapp.com/send?phone=5532999996976"
               icon={<WhatsAppIcon sx={{ fontSize: 32 }} />}
               title="WhatsApp"
               subtitle="Resposta rápida"
