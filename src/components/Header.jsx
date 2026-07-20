@@ -26,7 +26,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useLocation } from "react-router-dom";
-import pdfIcon from "../assets/pdf-icon2.webp";
 
 export default function Header({ mode, setMode }) {
   const theme = useTheme();
@@ -57,13 +56,6 @@ export default function Header({ mode, setMode }) {
   const handleWhatsApp = () => {
     window.open("https://wa.me/32999996976", "_blank", "noopener,noreferrer");
     handleCloseMenu();
-  };
-
-  const handleDownloadCV = () => {
-    const link = document.createElement("a");
-    link.href = "/assets/Wagner_Rodrigues_Frontend_Developer.pdf";
-    link.download = "Wagner_Rodrigues_Frontend_Developer.pdf";
-    link.click();
   };
 
   return (
@@ -127,28 +119,6 @@ export default function Header({ mode, setMode }) {
 
             {/* RIGHT */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Tooltip title="Baixar Currículo" arrow>
-                <IconButton
-                  color="inherit"
-                  disableRipple
-                  disableTouchRipple
-                  onClick={handleDownloadCV}
-                  sx={{
-                    width: 48,
-                    height: 48,
-                    transition: "transform 0.2s ease",
-                    "&:hover": { transform: "scale(1.1)" },
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src={pdfIcon}
-                    alt="CV"
-                    sx={{ width: 32, height: 32 }}
-                  />
-                </IconButton>
-              </Tooltip>
-
               <Tooltip
                 title={mode === "dark" ? "Modo Claro" : "Modo Escuro"}
                 arrow

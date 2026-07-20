@@ -5,15 +5,34 @@ import {
   Grid,
   Typography,
   Button,
+  IconButton,
+  Tooltip,
   useTheme,
   alpha,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import EmailIcon from "@mui/icons-material/Email";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { fadeInUp, floatAnimation } from "../../styles/animations";
 import profilepic from "../../assets/profilepic3.png";
 
 export default function HeroSection() {
   const theme = useTheme();
+
+  const miniButtonSx = (hoverColor) => ({
+    width: 44,
+    height: 44,
+    color: theme.palette.text.secondary,
+    border: `1px solid ${alpha(theme.palette.divider, 0.3)}`,
+    transition: "all 0.25s ease",
+    "&:hover": {
+      color: "#fff",
+      bgcolor: hoverColor,
+      borderColor: hoverColor,
+      transform: "translateY(-3px)",
+    },
+  });
 
   return (
     <Box
@@ -119,6 +138,7 @@ export default function HeroSection() {
                   gap: 2,
                   flexWrap: "wrap",
                   pt: 2,
+                  alignItems: "center",
                   justifyContent: { xs: "center", md: "flex-start" },
                 }}
               >
@@ -150,6 +170,38 @@ export default function HeroSection() {
                 >
                   Entre em Contato
                 </Button>
+
+                {/* Mini contact buttons */}
+                <Box sx={{ display: "flex", gap: 1, ml: { xs: 0, md: 1 } }}>
+                  <Tooltip title="Enviar e-mail">
+                    <IconButton
+                      href="mailto:rodrigueswagner181@gmail.com"
+                      sx={miniButtonSx(theme.palette.primary.main)}
+                    >
+                      <EmailIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="WhatsApp">
+                    <IconButton
+                      href="https://api.whatsapp.com/send?phone=5532999996976"
+                      target="_blank"
+                      sx={miniButtonSx(theme.palette.success.main)}
+                    >
+                      <WhatsAppIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Baixar currículo (PDF)">
+                    <IconButton
+                      href="/assets/Wagner_Rodrigues_Frontend_Developer.pdf"
+                      download
+                      sx={miniButtonSx(theme.palette.secondary.main)}
+                    >
+                      <DescriptionIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
               </Box>
             </Box>
           </Grid>
