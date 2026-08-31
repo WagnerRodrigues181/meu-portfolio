@@ -9,6 +9,7 @@ import {
   Button,
   Stack,
   Chip,
+  Collapse,
   useTheme,
   alpha,
   IconButton,
@@ -17,16 +18,20 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LaunchIcon from "@mui/icons-material/Launch";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { projects } from "../../data/portfolioData.jsx";
 import { fadeInUp } from "../../styles/animations";
 
 export default function ProjectsGrid() {
   const theme = useTheme();
+  const [showSecondary, setShowSecondary] = useState(false);
 
-  const nonFeaturedProjects = projects.filter((proj) => !proj.featured);
+  const mainProjects = projects.filter((p) => !p.featured && !p.secondary);
+  const secondaryProjects = projects.filter((p) => p.secondary);
+  const allGridProjects = [...mainProjects, ...secondaryProjects];
 
   const [imageIndices, setImageIndices] = useState(
-    nonFeaturedProjects.reduce((acc, _, idx) => ({ ...acc, [idx]: 0 }), {}),
+    allGridProjects.reduce((acc, _, idx) => ({ ...acc, [idx]: 0 }), {}),
   );
 
   const handleNextImage = (e, projectIndex, totalImages) => {
@@ -45,13 +50,13 @@ export default function ProjectsGrid() {
     }));
   };
 
-  const renderProjectCard = (proj, index) => {
+  const renderProjectCard = (proj, index, staggerOffset = 0) => {
     const hasMultipleImages = proj.images && proj.images.length > 1;
     const currentImageIndex = imageIndices[index] || 0;
     const mainImage = proj.images ? proj.images[currentImageIndex] : proj.image;
 
     return (
-      <Grid item xs={12} sm={6} key={index}>
+      <Grid item xs={12} sm={6} key={proj.title}>
         <Card
           sx={{
             borderRadius: 3.5,
@@ -59,7 +64,7 @@ export default function ProjectsGrid() {
             height: "100%",
             display: "flex",
             flexDirection: "column",
-            animation: `${fadeInUp} 0.6s ease-out ${index * 0.12}s both`,
+            animation: `${fadeInUp} 0.6s ease-out ${(index + staggerOffset) * 0.12}s both`,
             background:
               theme.palette.mode === "dark"
                 ? `linear-gradient(160deg, ${alpha("#ffffff", 0.055)} 0%, ${alpha("#ffffff", 0.02)} 100%)`
@@ -76,17 +81,13 @@ export default function ProjectsGrid() {
             },
           }}
         >
-          {/* Image - dominant, tall */}
           <Box
             sx={{
               position: "relative",
               paddingTop: "62%",
               overflow: "hidden",
               flexShrink: 0,
-              bgcolor:
-                theme.palette.mode === "dark"
-                  ? alpha("#000", 0.35)
-                  : alpha("#000", 0.03),
+              bgcolor: theme.palette.mode === "dark" ? alpha("#000", 0.35) : alpha("#000", 0.03),
             }}
           >
             <img
@@ -104,8 +105,6 @@ export default function ProjectsGrid() {
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />
-
-            {/* Bottom fade */}
             <Box
               sx={{
                 position: "absolute",
@@ -114,15 +113,11 @@ export default function ProjectsGrid() {
                 right: 0,
                 height: "40%",
                 background: `linear-gradient(to top, ${
-                  theme.palette.mode === "dark"
-                    ? "rgba(8,8,12,0.95)"
-                    : "rgba(245,245,250,0.95)"
+                  theme.palette.mode === "dark" ? "rgba(8,8,12,0.95)" : "rgba(245,245,250,0.95)"
                 } 0%, transparent 100%)`,
                 pointerEvents: "none",
               }}
             />
-
-            {/* Nav arrows */}
             {hasMultipleImages && (
               <>
                 <IconButton
@@ -140,10 +135,7 @@ export default function ProjectsGrid() {
                     transition: "all 0.25s ease",
                     width: 32,
                     height: 32,
-                    "&:hover": {
-                      bgcolor: theme.palette.background.paper,
-                      transform: "translateY(-50%) scale(1.1)",
-                    },
+                    "&:hover": { bgcolor: theme.palette.background.paper, transform: "translateY(-50%) scale(1.1)" },
                   }}
                 >
                   <ArrowBackIosNewIcon sx={{ fontSize: 12 }} />
@@ -163,16 +155,11 @@ export default function ProjectsGrid() {
                     transition: "all 0.25s ease",
                     width: 32,
                     height: 32,
-                    "&:hover": {
-                      bgcolor: theme.palette.background.paper,
-                      transform: "translateY(-50%) scale(1.1)",
-                    },
+                    "&:hover": { bgcolor: theme.palette.background.paper, transform: "translateY(-50%) scale(1.1)" },
                   }}
                 >
                   <ArrowForwardIosIcon sx={{ fontSize: 12 }} />
                 </IconButton>
-
-                {/* Counter */}
                 <Box
                   sx={{
                     position: "absolute",
@@ -186,31 +173,17 @@ export default function ProjectsGrid() {
                     borderRadius: 1.5,
                   }}
                 >
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: "0.65rem",
-                      letterSpacing: 0.5,
-                    }}
-                  >
+                  <Typography variant="caption" sx={{ fontWeight: 700, fontSize: "0.65rem", letterSpacing: 0.5 }}>
                     {currentImageIndex + 1}/{proj.images.length}
                   </Typography>
                 </Box>
               </>
             )}
-
-            {/* Dot indicators */}
             {hasMultipleImages && (
               <Stack
                 direction="row"
                 spacing={0.5}
-                sx={{
-                  position: "absolute",
-                  bottom: 12,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                }}
+                sx={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)" }}
               >
                 {proj.images.map((_, dotIdx) => (
                   <Box
@@ -223,10 +196,7 @@ export default function ProjectsGrid() {
                       width: dotIdx === currentImageIndex ? 16 : 6,
                       height: 6,
                       borderRadius: 3,
-                      bgcolor:
-                        dotIdx === currentImageIndex
-                          ? theme.palette.primary.main
-                          : alpha("#fff", 0.4),
+                      bgcolor: dotIdx === currentImageIndex ? theme.palette.primary.main : alpha("#fff", 0.4),
                       transition: "all 0.3s ease",
                       cursor: "pointer",
                     }}
@@ -236,16 +206,7 @@ export default function ProjectsGrid() {
             )}
           </Box>
 
-          {/* Content */}
-          <CardContent
-            sx={{
-              p: 2.5,
-              pb: "20px !important",
-              flexGrow: 1,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <CardContent sx={{ p: 2.5, pb: "20px !important", flexGrow: 1, display: "flex", flexDirection: "column" }}>
             <Typography
               variant="h6"
               sx={{
@@ -264,24 +225,12 @@ export default function ProjectsGrid() {
 
             <Typography
               variant="body2"
-              sx={{
-                color: alpha(theme.palette.text.secondary, 0.85),
-                mb: 2,
-                lineHeight: 1.65,
-                fontSize: "0.82rem",
-              }}
+              sx={{ color: alpha(theme.palette.text.secondary, 0.85), mb: 2, lineHeight: 1.65, fontSize: "0.82rem" }}
             >
               {proj.description}
             </Typography>
 
-            {/* Stack chips */}
-            <Stack
-              direction="row"
-              spacing={0.6}
-              flexWrap="wrap"
-              useFlexGap
-              sx={{ mb: 2.5, mt: "auto" }}
-            >
+            <Stack direction="row" spacing={0.6} flexWrap="wrap" useFlexGap sx={{ mb: 2.5, mt: "auto" }}>
               {proj.stack.map((item, stackIndex) => (
                 <Chip
                   key={stackIndex}
@@ -294,15 +243,9 @@ export default function ProjectsGrid() {
                     height: 24,
                     bgcolor: alpha(theme.palette.primary.main, 0.08),
                     border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                    color:
-                      theme.palette.mode === "dark"
-                        ? theme.palette.primary.light
-                        : theme.palette.primary.dark,
+                    color: theme.palette.mode === "dark" ? theme.palette.primary.light : theme.palette.primary.dark,
                     "& .MuiChip-icon": {
-                      color:
-                        theme.palette.mode === "dark"
-                          ? theme.palette.primary.light
-                          : theme.palette.primary.dark,
+                      color: theme.palette.mode === "dark" ? theme.palette.primary.light : theme.palette.primary.dark,
                       fontSize: 13,
                     },
                     "& .MuiChip-label": { px: 1 },
@@ -311,7 +254,6 @@ export default function ProjectsGrid() {
               ))}
             </Stack>
 
-            {/* Buttons */}
             <Stack direction="row" spacing={1}>
               <Button
                 size="small"
@@ -328,10 +270,7 @@ export default function ProjectsGrid() {
                   fontSize: "0.8rem",
                   background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
                   boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-                  "&:hover": {
-                    boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.45)}`,
-                    transform: "translateY(-1px)",
-                  },
+                  "&:hover": { boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.45)}`, transform: "translateY(-1px)" },
                 }}
               >
                 Demo
@@ -350,10 +289,7 @@ export default function ProjectsGrid() {
                   fontSize: "0.8rem",
                   minWidth: 90,
                   border: `1px solid ${alpha(theme.palette.primary.main, 0.35)}`,
-                  color:
-                    theme.palette.mode === "dark"
-                      ? theme.palette.primary.light
-                      : theme.palette.primary.dark,
+                  color: theme.palette.mode === "dark" ? theme.palette.primary.light : theme.palette.primary.dark,
                   "&:hover": {
                     border: `1px solid ${theme.palette.primary.main}`,
                     background: alpha(theme.palette.primary.main, 0.08),
@@ -372,7 +308,6 @@ export default function ProjectsGrid() {
 
   return (
     <Box sx={{ py: 10, position: "relative", overflow: "hidden" }}>
-      {/* Subtle ambient glow */}
       <Box
         sx={{
           position: "absolute",
@@ -390,14 +325,7 @@ export default function ProjectsGrid() {
         <Box sx={{ textAlign: "center", mb: 7 }}>
           <Typography
             variant="overline"
-            sx={{
-              color: theme.palette.primary.main,
-              fontWeight: 700,
-              letterSpacing: 3,
-              mb: 1,
-              display: "block",
-              fontSize: "0.7rem",
-            }}
+            sx={{ color: theme.palette.primary.main, fontWeight: 700, letterSpacing: 3, mb: 1, display: "block", fontSize: "0.7rem" }}
           >
             ✦ Portfólio ✦
           </Typography>
@@ -414,25 +342,45 @@ export default function ProjectsGrid() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Outros Projetos
+            Mais Projetos
           </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              maxWidth: 520,
-              mx: "auto",
-              lineHeight: 1.7,
-            }}
-          >
-            Aplicações que demonstram expertise em diferentes tecnologias e
-            padrões de desenvolvimento
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary, maxWidth: 520, mx: "auto", lineHeight: 1.7 }}>
+            Aplicações que demonstram expertise em diferentes tecnologias e padrões de desenvolvimento
           </Typography>
         </Box>
 
         <Grid container spacing={3} justifyContent="center">
-          {nonFeaturedProjects.map(renderProjectCard)}
+          {mainProjects.map((proj, idx) => renderProjectCard(proj, idx))}
         </Grid>
+
+        {/* Toggle dos projetos secundários */}
+        <Box sx={{ textAlign: "center", mt: 6 }}>
+          <Button
+            onClick={() => setShowSecondary((v) => !v)}
+            endIcon={
+              <KeyboardArrowDownIcon
+                sx={{ transition: "transform 0.3s ease", transform: showSecondary ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
+            }
+            sx={{
+              textTransform: "none",
+              fontWeight: 700,
+              fontSize: "0.85rem",
+              color: alpha(theme.palette.text.secondary, 0.8),
+              "&:hover": { color: theme.palette.primary.main, background: "transparent" },
+            }}
+          >
+            {showSecondary ? "Ocultar projetos secundários" : "Confira projetos secundários"}
+          </Button>
+        </Box>
+
+        <Collapse in={showSecondary} timeout={400} unmountOnExit>
+          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1 }}>
+            {secondaryProjects.map((proj, idx) =>
+              renderProjectCard(proj, mainProjects.length + idx, 0),
+            )}
+          </Grid>
+        </Collapse>
 
         <Box sx={{ textAlign: "center", mt: 7 }}>
           <Button
@@ -449,10 +397,7 @@ export default function ProjectsGrid() {
               fontWeight: 700,
               fontSize: "0.95rem",
               border: `1px solid ${alpha(theme.palette.primary.main, 0.4)}`,
-              color:
-                theme.palette.mode === "dark"
-                  ? theme.palette.primary.light
-                  : theme.palette.primary.dark,
+              color: theme.palette.mode === "dark" ? theme.palette.primary.light : theme.palette.primary.dark,
               transition: "all 0.25s ease",
               "&:hover": {
                 border: `1px solid ${theme.palette.primary.main}`,

@@ -1,4 +1,3 @@
-// import proj1Image from "../assets/form.png";
 import cryptoDashboard from "../assets/crypto-dashboard.png";
 import cryptoDetailCard from "../assets/crypto-detail-card.png";
 import horaCodarLogica from "../assets/hora-codar-logica.png";
@@ -20,6 +19,10 @@ import grindLogin from "../assets/grind-login.png";
 import grindProfile from "../assets/grind-profile.png";
 import grindDash from "../assets/grind-dash.png";
 import grindTimer from "../assets/grind-timer.png";
+
+// LinkForge
+import linkforgeForm from "../assets/shorten-form.png"
+import linkforgeDashboard from "../assets/dashboard.png";
 
 import {
   FaHtml5,
@@ -46,6 +49,10 @@ import {
   SiVercel,
   SiTailwindcss,
   SiVitest,
+  SiPostgresql,
+  SiRedis,
+  SiGithubactions,
+  SiNestjs,
 } from "react-icons/si";
 import { TbChartLine, TbChartBar } from "react-icons/tb";
 import { MdOutlineSettingsSuggest } from "react-icons/md";
@@ -109,13 +116,60 @@ export const otherStacks = [
   },
 ];
 
+// ainda não desenvolvi o fluxio, me lembrar disso. Card "Em Desenvolvimento" separado,
+// não entra no array "projects" até o deploy sair.
+export const comingSoonProject = {
+  title: "Fluxio",
+  emoji: "📇",
+  description:
+    "CRM-lite para gerenciar clientes, projetos e pagamentos do meu próprio negócio de SPAs e Bots automatizados. Uso prático real: mais um projeto que resolve um problema meu, sem ser apenas um tutorial.",
+  expected: "09 de setembro de 2026",
+  stack: [
+    { label: "NestJS", icon: <SiNestjs /> },
+    { label: "TypeScript", icon: <SiTypescript /> },
+    { label: "PostgreSQL", icon: <SiPostgresql /> },
+    { label: "Prisma", icon: <SiPrisma /> },
+    { label: "React", icon: <FaReact /> },
+    { label: "Zustand", icon: <MdOutlineSettingsSuggest /> },
+    { label: "Recharts", icon: <TbChartBar /> },
+  ],
+};
+
 export const projects = [
+  {
+    title: "LinkForge",
+    description:
+      "Encurtador de URL com cache em Redis e dashboard de analytics em tempo real. Cache-aside no redirect (rota mais quente do sistema), agregação via SQL GROUP BY, pipeline de CI com lint + teste + build a cada push.",
+    longDescription:
+      "Aplicação full-stack de encurtamento de links com decisão de arquitetura bem planejada: o redirect (GET /:slug) checa Redis antes de tocar o Postgres. Cache hit responde em menos de 1ms, cache miss popula o Redis com TTL e segue com fallback pro Postgres se o Redis cair. Os cliques são gravados de forma assíncrona pra não atrasar o redirect. Analytics agrega no banco (SQL GROUP BY) em vez de trazer tudo pro Node, o que torna 4x mais rápido que agregação em JavaScript, medido com 20k cliques sintéticos. Deploy completo: Vercel (frontend) + Render (backend + Postgres) + Upstash (Redis), com GitHub Actions rodando lint, teste e build a cada push.",
+    stack: [
+      { label: "Express", icon: <SiExpress /> },
+      { label: "TypeScript", icon: <SiTypescript /> },
+      { label: "PostgreSQL", icon: <SiPostgresql /> },
+      { label: "Redis", icon: <SiRedis /> },
+      { label: "React", icon: <FaReact /> },
+      { label: "Tailwind", icon: <SiTailwindcss /> },
+      { label: "Docker", icon: <FaDocker /> },
+      { label: "GitHub Actions", icon: <SiGithubactions /> },
+    ],
+    features: [
+      "⚡ Cache-aside no redirect — cache hit em <1ms",
+      "📊 Analytics agregado via SQL GROUP BY (4x mais rápido)",
+      "🐳 Docker Compose orquestrando app + Postgres + Redis",
+      "🔄 CI/CD: lint, teste e build a cada push (GitHub Actions)",
+    ],
+    github: "https://github.com/WagnerRodrigues181/linkforge",
+    demo: "https://linkforge-five-roan.vercel.app",
+    images: [linkforgeForm, linkforgeDashboard],
+    featured: true,
+    theme: "crt",
+  },
   {
     title: "NutriLens",
     description:
       "Rastreador nutricional completo com análise de macros, visualização de dados e alta cobertura de testes. Dashboard inteligente com tracking em tempo real, múltiplas visualizações de dados e sistema de insights automáticos.",
     longDescription:
-      "Aplicação full-stack de tracking nutricional focada em precisão, análise de dados e experiência do usuário. Desenvolvida com arquitetura escalável, type-safety completo e 96% de cobertura de testes. Inclui dashboard com progresso circular de macros, sistema de streaks e gamificação, CRUD completo de refeições com templates reutilizáveis, 4 tipos de gráficos interativos (linha, pizza, barras, área) com análise estatística, e portabilidade total com export/import em CSV e JSON.",
+      "Aplicação de tracking nutricional focada em precisão, análise de dados e experiência do usuário. Desenvolvida com arquitetura escalável, type-safety completo e 90%+ de cobertura de testes. Inclui dashboard com progresso circular de macros, sistema de streaks e gamificação, CRUD completo de refeições com templates reutilizáveis, 4 tipos de gráficos interativos (linha, pizza, barras, área) com análise estatística, e portabilidade total com export/import em CSV e JSON.",
     stack: [
       { label: "React", icon: <FaReact /> },
       { label: "TypeScript", icon: <SiTypescript /> },
@@ -140,7 +194,7 @@ export const projects = [
       nutrilensGraphs,
       nutrilensAchievements,
     ],
-    featured: true,
+    featured: false,
   },
   {
     title: "GrindTracker",
@@ -167,6 +221,7 @@ export const projects = [
     demo: "https://grindtracker.vercel.app/",
     images: [grindDash, grindProfile, grindTimer, grindLogin],
     featured: false,
+    secondary: true,
   },
   {
     title: "CryptoVue Dashboard",
@@ -194,5 +249,6 @@ export const projects = [
     demo: "https://crypto-dashboard-wr.netlify.app/",
     images: [cryptoDashboard, cryptoDetailCard],
     featured: false,
+    secondary: true,
   },
 ];

@@ -15,7 +15,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { fadeInUp, floatAnimation } from "../../styles/animations";
-import profilepic from "../../assets/profilepic3.png";
+import profilepic from "../../assets/profilePic.png";
 
 export default function HeroSection() {
   const theme = useTheme();

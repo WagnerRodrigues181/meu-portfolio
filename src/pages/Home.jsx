@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box } from "@mui/material";
 import HeroSection from "../components/home/HeroSection";
 import AboutSection from "../components/home/AboutSection";
+import ComingSoonCard from "../components/home/ComingSoonCard";
 import FeaturedProject from "../components/home/FeaturedProject";
 import ProjectsGrid from "../components/home/ProjectsGrid";
 import TechStackSection from "../components/home/TechStackSection";
@@ -30,6 +31,7 @@ export default function Home() {
     <Box sx={{ bgcolor: "background.default", minHeight: "100vh" }}>
       <HeroSection />
       <AboutSection />
+      <ComingSoonCard />
       <FeaturedProject />
       <ProjectsGrid />
       <TechStackSection />
